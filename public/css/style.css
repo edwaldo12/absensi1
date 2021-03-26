@@ -1,0 +1,9 @@
+.delete-category,.delete-time,.add-student-time,.edit-time,.delete-student-time{
+    cursor: pointer;
+}
+.select2-selection__rendered {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: -5px;
+    font-size: 14px;
+  }
+  
