@@ -21,6 +21,7 @@ class CreateStudentsTable extends Migration
             $table->string('address',255);
             $table->enum('gender', ["M","F"]);
             $table->string('phone',30);
+            $table->enum('package',[1,2]);
             $table->timestamps();
         });
     }

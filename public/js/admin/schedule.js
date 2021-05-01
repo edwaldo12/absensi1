@@ -56,7 +56,7 @@ $(function () {
             { data: 'id', name: 'id', width: "1%" },
             { data: 'teacher.name', name: 'teacher.name', width: "10%" },
             { data: 'category.name', name: 'category.name' },
-            { data: 'max_target', name: 'max_target' },
+            // { data: 'max_target', name: 'max_target' },
             { data: 'times', name: 'times' }
         ],
         columnDefs: [{
@@ -123,11 +123,11 @@ $(function () {
             max_target: $("#addScheduleForm input#max_target").val(),
             _token: $('meta[name="csrf-token"]').attr('content')
         }
-        if (formData.max_target < 1) {
-            $("#addScheduleForm input#max_target").addClass("is-invalid")
-            $("#max_target_error").text("Target maksimal kelas tidak boleh kosong!")
-            isError = isError || true
-        }
+        // if (formData.max_target < 1) {
+        //     $("#addScheduleForm input#max_target").addClass("is-invalid")
+        //     $("#max_target_error").text("Target maksimal kelas tidak boleh kosong!")
+        //     isError = isError || true
+        // }
 
         if (!isError) {
             $.ajax({
@@ -207,11 +207,11 @@ $(function () {
             _token: $('meta[name="csrf-token"]').attr('content'),
             _method: "put"
         }
-        if (formData.max_target < 1) {
-            $("#editScheduleForm input#edit_max_target").addClass("is-invalid")
-            $("#edit_max_target_error").text("Target kelas tidak boleh kosong!")
-            isError = isError || true
-        }
+        // if (formData.max_target < 1) {
+        //     $("#editScheduleForm input#edit_max_target").addClass("is-invalid")
+        //     $("#edit_max_target_error").text("Target kelas tidak boleh kosong!")
+        //     isError = isError || true
+        // }
 
         if (!isError) {
             $.ajax({

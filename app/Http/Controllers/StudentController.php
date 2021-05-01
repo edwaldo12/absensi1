@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Schedule;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 class StudentController extends Controller
@@ -24,17 +25,31 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
-        $student = new Student;
-        $student->name = $request->name;
-        $student->gender = $request->gender;
-        $student->place_of_birth = $request->place_of_birth;
-        $student->date_of_birth = $request->date_of_birth;
-        $student->phone = $request->phone;
-        $student->address = $request->address;
-        return response()->json([
-            'success' => $student->save()
-        ]);
+        DB::beginTransaction();
+        try {
+            $student = new Student;
+            $student->name = $request->name;
+            $student->package = $request->package;
+            $student->gender = $request->gender;
+            $student->place_of_birth = $request->place_of_birth;
+            $student->date_of_birth = $request->date_of_birth;
+            $student->phone = $request->phone;
+            $student->address = $request->address;
+            $save = $student->save();
+            $studentCategoryIdList = !empty($request->studentCategoryIdList) ? array_unique($request->studentCategoryIdList) : [];
+            foreach ($studentCategoryIdList as $category_id) {
+                $student->categories()->attach($category_id);
+            }
+            DB::commit();
+            $response["success"] = $save;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $response['success'] = false;
+            $response['message'] = $e->getMessage();
+        }
+        return response()->json($response);
     }
+
     public function show($id)
     {
     }
@@ -49,6 +64,7 @@ class StudentController extends Controller
     {
         $student = Student::findOrFail($id);
         $student->name = $request->name;
+        $student->package = $request->package;
         $student->gender = $request->gender;
         $student->place_of_birth = $request->place_of_birth;
         $student->date_of_birth = $request->date_of_birth;
@@ -162,10 +178,10 @@ class StudentController extends Controller
     public function report_detail($student_id, $category_id)
     {
         $student = Student::find($student_id);
-        $details = Attendance::with(['class', 'class.time','class.teacher', 'class.time.schedule', 'class.time.schedule.category', 'class.time.schedule.teacher'])->where(['student_id' => $student_id])->get();
+        $details = Attendance::with(['class', 'class.time', 'class.teacher', 'class.time.schedule', 'class.time.schedule.category', 'class.time.schedule.teacher'])->where(['student_id' => $student_id])->get();
         $details = $details->filter(function ($detail) use ($category_id) {
             return $detail->class->time->schedule->category_id == $category_id;
         });
-        return view('student/report_detail',compact('details','student'));
+        return view('student/report_detail', compact('details', 'student'));
     }
 }

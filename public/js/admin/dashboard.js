@@ -2,6 +2,21 @@ $(function(){
     $("#today_table").on('click','.btn-open-class',function(){
         $("#addClassModal select#schedule_id").select2("val",$(this).data('schedule-id').toString());
         $("#addClassModal select#time_id").select2("val",$(this).data('time-id').toString());
+        let teacher_id = $("#addClassModal select#schedule_id option:selected").data('teacher-id')
+        $("#addClassModal select#teacher_id").select2('val',teacher_id.toString())
+        d = new Date()
+        month = d.getMonth()+1;
+        if(month<10){
+            month = "0"+month
+        }
+        dformat = [
+            d.getFullYear(),
+            month,
+            d.getDate()].join('-') + "T"+
+            [d.getHours(),
+            d.getMinutes()].join(':');
+        $("#addClassModal input#start_time").val(dformat)
+        $("#addClassModal input#end_time").val(dformat)
         $("#addClassModal").modal('show')
     })
 

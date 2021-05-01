@@ -56,7 +56,7 @@
                             @endforeach
                             @else
                             <tr>
-                                <td colspan="2" class="text-center">Belum ada kelas</td>
+                                <td colspan="4" class="text-center">Belum ada kelas</td>
                             </tr>
                             @endif
                         </tbody>

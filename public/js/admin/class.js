@@ -30,9 +30,9 @@ $(function () {
                         "</div>" +
                         "</div>"
                     e.class = e.time.schedule.category.name + " - " + e.time.schedule.teacher.name + "<br>" + e.time.start_time + " ~ " + e.time.end_time
-                    if(e.has_attendance){
+                    if (e.has_attendance) {
                         e.has_attendance = "<div class='badge badge-success'>Sudah</div>"
-                    }else{
+                    } else {
                         e.has_attendance = "<div class='badge badge-danger'>Belum</div>"
                     }
                 })
@@ -41,11 +41,11 @@ $(function () {
         },
         columns: [
             { data: 'id', name: 'id', width: "1%" },
-            { data: 'has_attendance', name: 'has_attendance',},
-            { data: 'teacher.name', name: 'teacher.name',},
-            { data: 'class', name: 'schedule.category.name',},
-            { data: 'start_time', name: 'start_time',},
-            { data: 'end_time', name: 'end_time',},
+            { data: 'has_attendance', name: 'has_attendance', },
+            { data: 'teacher.name', name: 'teacher.name', },
+            { data: 'class', name: 'schedule.category.name', },
+            { data: 'start_time', name: 'start_time', },
+            { data: 'end_time', name: 'end_time', },
         ],
         columnDefs: [{
             targets: 0,
@@ -263,14 +263,14 @@ $(function () {
             $("#edit_end_time_error").text("")
         }
     })
-    
-    $("#editClassForm select#edit_schedule_id").on('change',function(){
+
+    $("#editClassForm select#edit_schedule_id").on('change', function () {
         refreshTimeSelect($(this).val())
     })
-    $("#addClassForm select#schedule_id").on('change',function(){
+    $("#addClassForm select#schedule_id").on('change', function () {
         refreshTimeSelect($(this).val())
     })
-    
+
     async function refreshTimeSelect(schedule_id) {
         let edit_time_select_el = $("#editClassForm select#edit_time_id")
         edit_time_select_el.html("")
@@ -291,8 +291,8 @@ $(function () {
             success: function (result) {
                 console.log(result)
                 result.forEach(function (time) {
-                    edit_time_select_el.append("<option value='" + time.id + "'>"+time.day+", " + time.start_time + " ~ "+ time.end_time +"</option>")
-                    time_select_el.append("<option value='" + time.id + "'>"+time.day+", " + time.start_time + " ~ "+ time.end_time +"</option>")
+                    edit_time_select_el.append("<option value='" + time.id + "'>" + time.day + ", " + time.start_time + " ~ " + time.end_time + "</option>")
+                    time_select_el.append("<option value='" + time.id + "'>" + time.day + ", " + time.start_time + " ~ " + time.end_time + "</option>")
                 })
                 edit_time_select_el.attr('disabled', false)
                 time_select_el.attr('disabled', false)
@@ -310,4 +310,28 @@ $(function () {
         $("#addClassForm input#start_time").val("")
         $("#addClassForm input#end_time").val("")
     }
+
+    $("#btnAddClass").on('click', function () {
+        let teacher_id = $("select#schedule_id option:selected").data('teacher-id')
+        $("select#teacher_id").select2('val', teacher_id.toString())
+        d = new Date()
+        month = d.getMonth()+1;
+        if(month<10){
+            month = "0"+month
+        }
+        dformat = [
+            d.getFullYear(),
+            month,
+            d.getDate()].join('-') + "T"+
+            [d.getHours(),
+            d.getMinutes()].join(':');
+        $("#addClassForm input#start_time").val(dformat)
+        $("#addClassForm input#end_time").val(dformat)
+        $("#addClassModal").modal('show')
+    })
+
+    $("select#schedule_id").on('change', function () {
+        let teacher_id = $("select#schedule_id option:selected").data('teacher-id')
+        $("select#teacher_id").select2('val', teacher_id.toString())
+    })
 })

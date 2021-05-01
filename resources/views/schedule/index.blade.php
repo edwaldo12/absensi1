@@ -33,7 +33,7 @@
                                 <th>Aksi</th>
                                 <th>Guru</th>
                                 <th>Kategori</th>
-                                <th>Target Maksimal Buka Kelas</th>
+                                {{-- <th>Target Maksimal Buka Kelas</th> --}}
                                 <th>Waktu</th>
                             </tr>
                         </thead>
@@ -84,9 +84,9 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="max_target">Target Maksimal Buka Kelas</label>
-                        <input type="number" name="max_target" id="max_target" class="form-control"
-                            placeholder="Target Maksimal Buka Kelas">
+                        {{-- <label for="max_target">Target Maksimal Buka Kelas</label> --}}
+                        <input type="hidden" name="max_target" id="max_target" class="form-control"
+                            placeholder="Target Maksimal Buka Kelas" value="0">
                         <small id="max_target_error" class="text-danger"></small>
                         </select>
                     </div>
@@ -134,9 +134,9 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="edit_max_target">Target Maksimal Buka Kelas</label>
-                        <input type="number" name="edit_max_target" id="edit_max_target" class="form-control"
-                            placeholder="Target Maksimal Buka Kelas">
+                        {{-- <label for="edit_max_target">Target Maksimal Buka Kelas</label> --}}
+                        <input type="hidden" name="edit_max_target" id="edit_max_target" class="form-control"
+                            placeholder="Target Maksimal Buka Kelas" value="0">
                         <small id="edit_max_target_error" class="text-danger"></small>
                         </select>
                     </div>

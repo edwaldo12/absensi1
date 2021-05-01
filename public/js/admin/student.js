@@ -32,11 +32,11 @@ $(function () {
                         "</button>" +
                         "<div class='dropdown-menu' aria-labelledby='dropdownMenuButton'>" +
                         "<a class='dropdown-item' href='student_schedule/" + e.id + "'>Jadwal</a>" +
-                        "<a class='dropdown-item btn-category' href='#' data-id='" + e.id + "' data-name='"+ e.name +"'>Kategori</a>" +
+                        "<a class='dropdown-item btn-category' href='#' data-id='" + e.id + "' data-name='" + e.name + "'>Kategori</a>" +
                         "<a class='dropdown-item btn-edit' href='#' data-id='" + e.id + "'>Edit</a>" +
                         "<a class='" + (e.has_relation ? "d-none" : "") + " dropdown-item btn-delete' href='#' data-id='" + e.id + "'>Delete</a>" +
                         "<div class='dropdown-divider'></div>" +
-                        "<a class='dropdown-item btn-report' href='student/report/"+e.id+"'>Laporan Absensi</a>" +
+                        "<a class='dropdown-item btn-report' href='student/report/" + e.id + "'>Laporan Absensi</a>" +
                         "</div>" +
                         "</div>"
                     e.name = "<span class='" + (e.gender == "Laki-Laki" ? "text-info" : "text-danger") + "'>" + e.name + "</span>"
@@ -47,6 +47,7 @@ $(function () {
         columns: [
             { data: 'id', name: 'id', width: "1%" },
             { data: 'name', name: 'name', width: "10%" },
+            { data: 'package', name: 'package', width: "10%" },
             { data: 'phone', name: 'phone' },
             { data: 'address', name: 'address' },
             { data: 'age', name: 'date_of_birth' },
@@ -103,15 +104,35 @@ $(function () {
         })
     })
 
+    let studentCategoryIdList = []
+    $("#addStudentForm #btnAddStudentCategoryId").on('click', function () {
+        let addStudentCategoryList = $("#addStudentForm #addStudentCategoryList")
+        let studentCategorySelectEl = $("#addStudentForm select#category")
+        if (!studentCategoryIdList.includes(studentCategorySelectEl.val())) {
+            studentCategoryIdList.push(studentCategorySelectEl.val())
+            addStudentCategoryList.append("<div class='badge badge-primary' data-category-id='"+studentCategorySelectEl.val()+"'>" + studentCategorySelectEl.find(":selected").text() + " <i class='fa fa-times delete-student-category'></i></div> ")
+        }
+    })
+
+    $("#addStudentForm #addStudentCategoryList").on('click', '.delete-student-category', function () {
+        studentCategoryIdList = studentCategoryIdList.filter((e)=> { return e != $(this).parent().data('category-id') })
+        $(this).parent().remove()
+    })
+
+    let isSaving = false
     $("#btnSaveStudent").on('click', function () {
+        if(isSaving) return        
+        isSaving = true
         let isError = false
         let formData = {
             name: $("#addStudentForm input#name").val(),
             gender: $("#addStudentForm select#gender option:selected").val(),
+            package: $("#addStudentForm select#package option:selected").val(),
             place_of_birth: $("#addStudentForm input#place_of_birth").val(),
             date_of_birth: $("#addStudentForm input#date_of_birth").val(),
             phone: $("#addStudentForm input#phone").val(),
             address: $("#addStudentForm input#address").val(),
+            studentCategoryIdList : studentCategoryIdList,
             _token: $('meta[name="csrf-token"]').attr('content')
         }
         if (formData.name.length < 1) {
@@ -160,6 +181,7 @@ $(function () {
                             timeout: 3000
                         });
                     }
+                    isSaving = false
                     student_datatables.ajax.reload()
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
@@ -168,6 +190,7 @@ $(function () {
                         positionClass: 'topRight',
                         timeout: 3000
                     });
+                    isSaving = false
                 }
             })
         }
@@ -222,6 +245,11 @@ $(function () {
                     } else {
                         $("#edit_gender option[value='F']").prop("selected", true);
                     }
+                    if (student.package == "Regular") {
+                        $("#edit_package option[value='1']").prop("selected", true);
+                    } else {
+                        $("#edit_package option[value='2']").prop("selected", true);
+                    }
                     $("#edit_place_of_birth").val(student.place_of_birth)
                     $("#edit_date_of_birth").val(student.date_of_birth)
                     $("#edit_phone").val(student.phone)
@@ -238,6 +266,7 @@ $(function () {
         let formData = {
             name: $("#editStudentForm input#edit_name").val(),
             gender: $("#editStudentForm select#edit_gender option:selected").val(),
+            package: $("#editStudentForm select#edit_package option:selected").val(),
             place_of_birth: $("#editStudentForm input#edit_place_of_birth").val(),
             date_of_birth: $("#editStudentForm input#edit_date_of_birth").val(),
             phone: $("#editStudentForm input#edit_phone").val(),
@@ -282,7 +311,6 @@ $(function () {
                             positionClass: 'topRight',
                             timeout: 3000
                         });
-                        // clearAddStudentForm()
                         $("#editStudentModal").modal('hide')
                     } else {
                         VanillaToasts.create({
@@ -347,10 +375,13 @@ $(function () {
         $("#addStudentForm input#phone").val("")
         $("#addStudentForm input#address").val("")
         $("#addStudentForm select#gender option[value='M']").prop('selected', true)
+        $("#addStudentForm select#package option[value='1']").prop('selected', true)
+        studentCategoryIdList = []
+        $("#addStudentForm #addStudentCategoryList").html("")
     }
 
     student_datatables.on('click', '.btn-category', async function () {
-        $('#studentCategoryModal #studentCategoryModalLabel').text("Kategori Siswa - "+$(this).data('name'))
+        $('#studentCategoryModal #studentCategoryModalLabel').text("Kategori Siswa - " + $(this).data('name'))
 
         let student_id = $(this).data('id')
         $("#btnAddCategory").data('id', student_id)
@@ -460,8 +491,8 @@ $(function () {
         })
     }
 
-    $("#btnStudentReport").on('click',function(){
+    $("#btnStudentReport").on('click', function () {
         let student_id = $("#studentReportForm select#student_id").val()
-        window.location.href = "student/report/"+student_id
+        window.location.href = "student/report/" + student_id
     })
 })

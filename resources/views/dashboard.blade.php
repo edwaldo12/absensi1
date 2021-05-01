@@ -128,7 +128,7 @@
                 <th style="width:1%">Aksi</th>
                 <th>Guru</th>
                 <th>Kategori</th>
-                <th>Target Maksimal Buka Kelas</th>
+                {{-- <th>Target Maksimal Buka Kelas</th> --}}
                 <th>Waktu</th>
               </tr>
             </thead>
@@ -149,7 +149,7 @@
                 </td>
                 <td>{{ $today->schedule->teacher->name }}</td>
                 <td>{{ $today->schedule->category->name }}</td>
-                <td>{{ $today->schedule->max_target }}</td>
+                {{-- <td>{{ $today->schedule->max_target }}</td> --}}
                 <td>{{ $today->day }}, {{ $today->start_time }} ~ {{ $today->end_time }}</td>
               </tr>
               @endforeach
@@ -192,7 +192,7 @@
             <label for="schedule_id">Jadwal</label>
             <select name="schedule_id" id="schedule_id" class="form-control" disabled>
               @foreach ($schedules as $schedule)
-              <option value="{{ $schedule->id }}">{{ $schedule->category->name }} - {{ $schedule->teacher->name }}
+              <option data-teacher-id="{{ $schedule->teacher->id }}" value="{{ $schedule->id }}">{{ $schedule->category->name }} - {{ $schedule->teacher->name }}
                 {{ $schedule->start_time }} {{ $schedule->end_time }}</option>
               @endforeach
             </select>

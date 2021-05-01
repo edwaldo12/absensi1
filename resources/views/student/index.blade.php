@@ -29,7 +29,8 @@
                             <h3 class="mb-0 d-inline">Data Siswa</h3>
                         </div>
                         <div class="col-6 text-right">
-                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#studentReportModal">
+                            <button class="btn btn-sm btn-primary" data-toggle="modal"
+                                data-target="#studentReportModal">
                                 <i class="fa fa-book"></i>
                             </button>
                         </div>
@@ -41,6 +42,7 @@
                             <tr>
                                 <th>Aksi</th>
                                 <th>Nama</th>
+                                <th>Paket</th>
                                 <th>Telepon</th>
                                 <th>Alamat</th>
                                 <th>Usia</th>
@@ -79,6 +81,13 @@
                         <small id="name_error" class="text-danger"></small>
                     </div>
                     <div class="form-group">
+                        <label for="package">Paket</label>
+                        <select name="package" id="package" class="form-control">
+                            <option value="1">Regular</option>
+                            <option value="2">Private</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="gender">Jenis Kelamin</label>
                         <select name="gender" id="gender" class="form-control">
                             <option value="M">Laki-Laki</option>
@@ -107,6 +116,25 @@
                             class="form-control">
                         <small id="address_error" class="text-danger"></small>
                     </div>
+                    <div class="form-group">
+                        <label for="category">Kategori</label>
+                        <div class="row">
+                            <div class="col-10">
+                                <select name="category" id="category" class="form-control">
+                                    @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-2">
+                                <button id="btnAddStudentCategoryId" type="button" class="btn btn-primary">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mt-1" id="addStudentCategoryList">
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -134,6 +162,13 @@
                         <input type="text" id="edit_name" placeholder="Masukkan Nama" name="edit_name"
                             class="form-control">
                         <small id="edit_name_error" class="text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_package">Paket</label>
+                        <select name="edit_package" id="edit_package" class="form-control">
+                            <option value="1">Regular</option>
+                            <option value="2">Private</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="edit_gender">Jenis Kelamin</label>

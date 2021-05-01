@@ -7,6 +7,7 @@ use App\Models\ClassModel;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 class TeacherController extends Controller
@@ -24,16 +25,28 @@ class TeacherController extends Controller
 
     public function store(Request $request)
     {
-        $teacher = new Teacher;
-        $teacher->name = $request->name;
-        $teacher->gender = $request->gender;
-        $teacher->place_of_birth = $request->place_of_birth;
-        $teacher->date_of_birth = $request->date_of_birth;
-        $teacher->phone = $request->phone;
-        $teacher->address = $request->address;
-        return response()->json([
-            'success' => $teacher->save()
-        ]);
+        DB::beginTransaction();
+        try {
+            $teacher = new Teacher;
+            $teacher->name = $request->name;
+            $teacher->gender = $request->gender;
+            $teacher->place_of_birth = $request->place_of_birth;
+            $teacher->date_of_birth = $request->date_of_birth;
+            $teacher->phone = $request->phone;
+            $teacher->address = $request->address;
+            $save = $teacher->save();
+            $teacherCategoryIdList = !empty($request->teacherCategoryIdList) ?array_unique($request->teacherCategoryIdList) :[];
+            foreach ($teacherCategoryIdList as $category_id) {
+                $teacher->categories()->attach($category_id);
+            }
+            DB::commit();
+            $response["success"] = $save;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $response['success'] = false;
+            $response['message'] = $e->getMessage();
+        }
+        return response()->json($response);
     }
     public function show($id)
     {

@@ -7,8 +7,7 @@
             <div class="header-body">
                 <div class="row align-items-center py-4">
                     <div class="col-lg-6 col-7">
-                        <button class="btn btn-sm btn-neutral" id="btnAddClass" data-toggle="modal"
-                            data-target="#addClassModal">
+                        <button class="btn btn-sm btn-neutral" id="btnAddClass">
                             <i class="fa fa-plus"></i>
                             Tambah Kelas
                         </button>
@@ -78,7 +77,7 @@
                             <label for="schedule_id">Jadwal</label>
                             <select name="schedule_id" id="schedule_id" class="form-control">
                                 @foreach ($schedules as $schedule)
-                                    <option value="{{ $schedule->id }}">{{ $schedule->category->name }} - {{ $schedule->teacher->name }} {{ $schedule->start_time }} {{ $schedule->end_time }}</option>
+                                    <option data-teacher-id="{{ $schedule->teacher->id }}" value="{{ $schedule->id }}">{{ $schedule->category->name }} - {{ $schedule->teacher->name }} {{ $schedule->start_time }} {{ $schedule->end_time }}</option>
                                 @endforeach
                             </select>
                             <small id="schedule_id_error" class="text-danger"></small>

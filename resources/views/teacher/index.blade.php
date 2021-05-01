@@ -98,6 +98,25 @@
                             class="form-control">
                         <small id="address_error" class="text-danger"></small>
                     </div>
+                    <div class="form-group">
+                        <label for="category">Kategori</label>
+                        <div class="row">
+                            <div class="col-10">
+                                <select name="category" id="category" class="form-control">
+                                    @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-2">
+                                <button id="btnAddTeacherCategoryId" type="button" class="btn btn-primary">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mt-1" id="addTeacherCategoryList">
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

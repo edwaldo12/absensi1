@@ -1,4 +1,4 @@
-.delete-category,.delete-time,.add-student-time,.edit-time,.delete-student-time{
+.delete-category,.delete-time,.add-student-time,.edit-time,.delete-student-time,.delete-student-category,.delete-teacher-category{
     cursor: pointer;
 }
 .select2-selection__rendered {

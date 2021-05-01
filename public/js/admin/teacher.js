@@ -37,7 +37,7 @@ $(function () {
                         "<a class='dropdown-item btn-edit' href='#' data-id='" + e.id + "'>Edit</a>" +
                         "<a class='" + (e.has_relation ? "d-none" : "") + " dropdown-item btn-delete' href='#' data-id='" + e.id + "'>Delete</a>" +
                         "<div class='dropdown-divider'></div>" +
-                        // "<a class='dropdown-item btn-report' href='student/report/"+e.id+"'>Laporan Absensi</a>" +
+                        // "<a class='dropdown-item btn-report' href='teacher/report/"+e.id+"'>Laporan Absensi</a>" +
                         "<a class='dropdown-item btn-report' href='teacher/report/" + e.id + "'>Laporan Mengajar</a>" +
                         "</div>" +
                         "</div>"
@@ -104,7 +104,25 @@ $(function () {
         })
     })
 
+    let teacherCategoryIdList = []
+    $("#addTeacherForm #btnAddTeacherCategoryId").on('click', function () {
+        let addTeacherCategoryList = $("#addTeacherForm #addTeacherCategoryList")
+        let teacherCategorySelectEl = $("#addTeacherForm select#category")
+        if (!teacherCategoryIdList.includes(teacherCategorySelectEl.val())) {
+            teacherCategoryIdList.push(teacherCategorySelectEl.val())
+            addTeacherCategoryList.append("<div class='badge badge-primary' data-category-id='"+teacherCategorySelectEl.val()+"'>" + teacherCategorySelectEl.find(":selected").text() + " <i class='fa fa-times delete-teacher-category'></i></div> ")
+        }
+    })
+
+    $("#addTeacherForm #addTeacherCategoryList").on('click', '.delete-teacher-category', function () {
+        teacherCategoryIdList = teacherCategoryIdList.filter((e)=> { return e != $(this).parent().data('category-id') })
+        $(this).parent().remove()
+    })
+
+    let isSaving = false
     $("#btnSaveTeacher").on('click', function () {
+        if(isSaving) return        
+        isSaving = true
         let isError = false
         let formData = {
             name: $("#addTeacherForm input#name").val(),
@@ -113,6 +131,7 @@ $(function () {
             date_of_birth: $("#addTeacherForm input#date_of_birth").val(),
             phone: $("#addTeacherForm input#phone").val(),
             address: $("#addTeacherForm input#address").val(),
+            teacherCategoryIdList : teacherCategoryIdList,
             _token: $('meta[name="csrf-token"]').attr('content')
         }
         if (formData.name.length < 1) {
@@ -161,6 +180,7 @@ $(function () {
                             timeout: 3000
                         });
                     }
+                    isSaving = false
                     teacher_datatables.ajax.reload()
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
@@ -169,6 +189,7 @@ $(function () {
                         positionClass: 'topRight',
                         timeout: 3000
                     });
+                    isSaving = false
                 }
             })
         }
@@ -283,7 +304,6 @@ $(function () {
                             positionClass: 'topRight',
                             timeout: 3000
                         });
-                        // clearAddTeacherForm()
                         $("#editTeacherModal").modal('hide')
                     } else {
                         VanillaToasts.create({
@@ -348,6 +368,8 @@ $(function () {
         $("#addTeacherForm input#phone").val("")
         $("#addTeacherForm input#address").val("")
         $("#addTeacherForm select#gender option[value='M']").prop('selected', true)
+        teacherCategoryIdList = []
+        $("#addTeacherForm #addTeacherCategoryList").html("")
     }
 
     teacher_datatables.on('click', '.btn-category', async function () {
@@ -490,6 +512,4 @@ $(function () {
             }
         })
     }
-
-
 })

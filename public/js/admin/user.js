@@ -88,7 +88,7 @@ $(function () {
         })
     })
 
-    $("#btnAdminSave").on('click', function () {
+    $("#btnSaveAdmin").on('click', function () {
         let isError = false
         let formData = {
             name: $("#addAdminForm input#name").val(),
@@ -123,7 +123,7 @@ $(function () {
                             positionClass: 'topRight',
                             timeout: 3000
                         });
-                        clearAddStudentForm()
+                        clearAddAdminForm()
                         $("#addAdminModal").modal('hide')
                     } else {
                         VanillaToasts.create({

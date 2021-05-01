@@ -23,6 +23,7 @@ class StudentFactory extends Factory
     {
         return [
             "name" => $this->faker->name,
+            "package" => $this->faker->randomElement([1,2]),
             "place_of_birth" => $this->faker->city,
             "date_of_birth" => $this->faker->date(),
             "address" => $this->faker->address,

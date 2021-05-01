@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         Student::factory(10)->create();
         Teacher::factory(10)->create();
 
-        $categories = ['Soft Computing', 'Machine Learning', 'Data Science'];
+        $categories = ['Gitar','Piano','Drum','Harmonika'];
 
         foreach ($categories as $category) {
             Category::create(['name' => $category]);
